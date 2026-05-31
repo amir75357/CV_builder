@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS-Friendly CV Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Heebo:wght@400;600;700&family=Alef:wght@400;700&family=Frank+Ruhl+Libre:wght@400;700&family=Rubik:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar no-print">
+            <div class="logo">
+                <i class="fa-solid fa-file-contract"></i>
+                <h2>CV Builder</h2>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-target="section-personal"><i class="fa-solid fa-user"></i> Personal Details</button>
+                <button class="nav-btn" data-target="section-summary"><i class="fa-solid fa-align-left"></i> Summary</button>
+                <button class="nav-btn" data-target="section-experience"><i class="fa-solid fa-briefcase"></i> Experience</button>
+                <button class="nav-btn" data-target="section-education"><i class="fa-solid fa-graduation-cap"></i> Education</button>
+                <button class="nav-btn" data-target="section-skills"><i class="fa-solid fa-star"></i> Skills</button>
+                <button class="nav-btn" data-target="section-publications"><i class="fa-solid fa-book"></i> Publications</button>
+                <button class="nav-btn" data-target="section-job-desc" style="margin-top: 1rem; color: #4F46E5;"><i class="fa-solid fa-paste"></i> Job Description</button>
+                <button class="nav-btn" data-target="section-cover-letter" style="color: #4F46E5;"><i class="fa-solid fa-envelope"></i> Cover Letter</button>
+                <button class="nav-btn" data-target="section-translate" style="color: #4F46E5;"><i class="fa-solid fa-language"></i> AI Translate</button>
+                <button class="nav-btn" data-target="section-data"><i class="fa-solid fa-database"></i> Save & Load</button>
+                <button class="nav-btn" data-target="section-settings"><i class="fa-solid fa-gear"></i> Settings</button>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="export-pdf-btn" class="primary-btn"><i class="fa-solid fa-download"></i> Export PDF</button>
+            </div>
+        </aside>
+
+        <!-- Main Editor Area -->
+        <main class="editor-area no-print">
+            <!-- Personal Details -->
+            <section id="section-personal" class="editor-section active">
+                <h3>Personal Details</h3>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Full Name</label>
+                        <input type="text" id="personal-name" placeholder="e.g. Lorna Alvarado">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Target Job Title</label>
+                        <input type="text" id="personal-title" placeholder="e.g. Marketing Manager">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="personal-email" placeholder="e.g. john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="personal-phone" placeholder="e.g. (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="personal-location" placeholder="e.g. New York, NY">
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn/Website URL (Optional)</label>
+                        <input type="url" id="personal-url" placeholder="e.g. linkedin.com/in/johndoe">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="section-summary" class="editor-section">
+                <h3>Professional Summary</h3>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
+                        <label style="margin-bottom: 0;">Summary (Keep it under 3-4 sentences)</label>
+                        <button id="ai-enhance-summary-btn" class="secondary-btn ai-enhance-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" title="Fix grammar & tailor to job description"><i class="fa-solid fa-wand-magic-sparkles"></i> Enhance &amp; Tailor</button>
+                    </div>
+                    <textarea id="summary-text" rows="5" placeholder="Results-driven professional with experience in..."></textarea>
+                    <div id="ai-suggestion-summary" class="ai-suggestion-box hidden"></div>
+                </div>
+            </section>
+
+            <!-- Experience -->
+            <section id="section-experience" class="editor-section">
+                <div class="section-header">
+                    <h3>Work Experience</h3>
+                    <button id="add-experience-btn" class="secondary-btn"><i class="fa-solid fa-plus"></i> Add Job</button>
+                </div>
+                <div id="experience-list" class="item-list">
+                    <!-- Experience items will be injected here -->
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section id="section-education" class="editor-section">
+                <div class="section-header">
+                    <h3>Education</h3>
+                    <button id="add-education-btn" class="secondary-btn"><i class="fa-solid fa-plus"></i> Add Education</button>
+                </div>
+                <div id="education-list" class="item-list">
+                    <!-- Education items will be injected here -->
+                </div>
+            </section>
+
+            <!-- Skills -->
+            <section id="section-skills" class="editor-section">
+                <h3>Skills</h3>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
+                        <label style="margin-bottom: 0;">Enter skills separated by commas</label>
+                        <button id="ai-enhance-skills-btn" class="secondary-btn ai-enhance-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" title="Fix grammar & tailor to job description"><i class="fa-solid fa-wand-magic-sparkles"></i> Enhance &amp; Tailor</button>
+                    </div>
+                    <textarea id="skills-text" rows="4" placeholder="JavaScript, React, Python, Project Management, Agile..."></textarea>
+                    <div id="ai-suggestion-skills" class="ai-suggestion-box hidden"></div>
+                </div>
+            </section>
+
+            <!-- Publications -->
+            <section id="section-publications" class="editor-section">
+                <div class="section-header">
+                    <h3>Publications</h3>
+                    <button id="add-publication-btn" class="secondary-btn"><i class="fa-solid fa-plus"></i> Add Publication</button>
+                </div>
+                <div id="publications-list" class="item-list">
+                    <!-- Publication items will be injected here -->
+                </div>
+            </section>
+
+            <!-- Job Description (shared) -->
+            <section id="section-job-desc" class="editor-section">
+                <h3>Job Description</h3>
+                <p class="section-desc">Paste the target job description here. It will be used by AI Tailoring and Cover Letter generation.</p>
+                <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea id="ai-job-description" rows="10" placeholder="Paste the full job description here..."></textarea>
+                </div>
+                <p class="help-text" style="margin-top: 0.5rem;"><i class="fa-solid fa-circle-info"></i> This is auto-saved. You can navigate to AI Tailoring or Cover Letter tabs to use it.</p>
+            </section>
+
+            <!-- AI Tailoring removed - now inline -->
+
+            <!-- Cover Letter -->
+            <section id="section-cover-letter" class="editor-section">
+                <h3>Cover Letter Generator</h3>
+                <p class="section-desc">Generate a tailored, enthusiastic cover letter based on your CV and the Job Description.</p>
+                <button id="generate-cover-letter-btn" class="primary-btn"><i class="fa-solid fa-envelope"></i> Generate Cover Letter</button>
+                <div id="cover-letter-output" class="hidden" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label>Your Cover Letter <span style="font-size:0.85em; color:#888;">(edit freely before exporting)</span></label>
+                        <textarea id="cover-letter-text" rows="20" style="font-size: 1rem; line-height: 1.6;"></textarea>
+                    </div>
+                    <button id="export-cover-letter-btn" class="primary-btn" style="margin-top: 0.5rem;"><i class="fa-solid fa-download"></i> Export Cover Letter PDF</button>
+                </div>
+            </section>
+
+            <!-- AI Translate -->
+            <section id="section-translate" class="editor-section">
+                <h3>AI Translate CV</h3>
+                <p class="section-desc">Translate your entire CV between English and Hebrew using AI. A backup of your current CV will be saved automatically before translating.</p>
+                <div class="card" style="margin-bottom: 1.5rem; border-left: 3px solid #f59e0b; padding: 1rem;">
+                    <p style="margin: 0; font-size: 0.9em;"><i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> <strong>Note:</strong> Translation will overwrite all text fields in your CV. An automatic backup will be saved to your browser before proceeding.</p>
+                </div>
+                <div class="form-group">
+                    <label>Translate Direction</label>
+                    <select id="translate-direction" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border);">
+                        <option value="en-to-he">English → Hebrew (עברית)</option>
+                        <option value="he-to-en">Hebrew (עברית) → English</option>
+                    </select>
+                </div>
+                <button id="translate-cv-btn" class="primary-btn"><i class="fa-solid fa-language"></i> Translate CV</button>
+                <div id="translate-status" class="mt-2 text-sm text-muted"></div>
+            </section>
+
+            <!-- Save & Load -->
+            <section id="section-data" class="editor-section">
+                <h3>Save & Load CV Data</h3>
+                <p class="section-desc">Your progress is automatically saved to your browser, but you can download a backup or import an existing CV here.</p>
+                
+                <div class="card">
+                    <h4><i class="fa-solid fa-file-import"></i> Import Existing CV (PDF)</h4>
+                    <p class="help-text mb-3">Upload your current PDF CV. We will use the Gemini AI to automatically extract and organize your data.</p>
+                    <input type="file" id="import-pdf-file" accept="application/pdf" style="margin-bottom: 1rem;">
+                    <button id="import-pdf-btn" class="secondary-btn"><i class="fa-solid fa-magic"></i> Auto-fill from PDF</button>
+                    <div id="pdf-import-status" class="mt-2 text-sm text-muted"></div>
+                </div>
+
+                <div class="card mt-4">
+                    <h4><i class="fa-solid fa-download"></i> Backup & Restore</h4>
+                    <p class="help-text mb-3">Download your CV data as a JSON file, or restore from a previous backup.</p>
+                    <div style="display: flex; gap: 1rem;">
+                        <button id="download-json-btn" class="secondary-btn"><i class="fa-solid fa-download"></i> Download Backup</button>
+                        <label class="secondary-btn" style="cursor: pointer;">
+                            <i class="fa-solid fa-upload"></i> Restore Backup
+                            <input type="file" id="import-json-file" accept=".json" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="section-settings" class="editor-section">
+                <h3>Settings</h3>
+                <div class="form-group">
+                    <label>CV Language (For PDF Export)</label>
+                    <select id="settings-language" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit;">
+                        <option value="en">English</option>
+                        <option value="he">Hebrew (עברית)</option>
+                    </select>
+                </div>
+                <div class="form-group mt-4">
+                    <label>CV Font (Particularly for Hebrew)</label>
+                    <select id="settings-font" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit;">
+                        <option value="Inter">Inter (Default Sans-serif)</option>
+                        <option value="Assistant">Assistant (Clean Hebrew Sans-serif)</option>
+                        <option value="Heebo">Heebo (Modern Hebrew Sans-serif)</option>
+                        <option value="Rubik">Rubik (Rounded Sans-serif)</option>
+                        <option value="Alef">Alef (Hebrew Sans-serif)</option>
+                        <option value="Frank Ruhl Libre">Frank Ruhl Libre (Hebrew Serif)</option>
+                    </select>
+                </div>
+                <div class="form-group mt-4">
+                    <label>CV Theme Color</label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input type="color" id="settings-color" value="#E6E6E6" style="width: 50px; height: 40px; padding: 0; cursor: pointer;">
+                        <p class="help-text m-0">This color will be used for the background of the header.</p>
+                    </div>
+                </div>
+                <div class="form-group mt-4">
+                    <label>Gemini API Key</label>
+                    <input type="password" id="settings-api-key" placeholder="Enter your Google Gemini API Key">
+                    <p class="help-text">Required for AI Tailoring and Auto-filling from PDF. Your API key is stored securely in your browser's local storage.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Print Preview / ATS Output Area -->
+    <div id="print-area" class="print-only">
+        <div id="cv-preview">
+            <!-- CV Content generated dynamically for ATS output -->
+        </div>
+    </div>
+
+    <!-- Templates for dynamic JS injection -->
+    <template id="tpl-experience-item">
+        <div class="card item-card">
+            <div class="card-header">
+                <input type="text" class="exp-title" placeholder="Job Title" required>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="icon-btn move-up-btn" title="Move Up"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="icon-btn move-down-btn" title="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="icon-btn delete-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-grid">
+                <input type="text" class="exp-company" placeholder="Company Name">
+                <input type="text" class="exp-location" placeholder="Location">
+                <input type="text" class="exp-dates" placeholder="Dates Worked (e.g. 2020 - Present, or 2018-2019 & 2021-2022)" style="grid-column: span 2;">
+            </div>
+            <div class="form-group mt-2">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
+                    <label style="margin-bottom: 0;">Responsibilities & Achievements (One per line)</label>
+                    <button class="secondary-btn ai-enhance-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" title="Fix grammar & tailor to job description"><i class="fa-solid fa-wand-magic-sparkles"></i> Enhance &amp; Tailor</button>
+                </div>
+                <textarea class="exp-bullets" rows="4" placeholder="Led a team of 5 engineers...&#10;Increased revenue by 20%...&#10;(Press Enter for a new bullet)"></textarea>
+                <div class="ai-suggestion-box hidden"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-education-item">
+        <div class="card item-card">
+            <div class="card-header">
+                <input type="text" class="edu-degree" placeholder="Degree / Certificate" required>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="icon-btn move-up-btn" title="Move Up"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="icon-btn move-down-btn" title="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="icon-btn delete-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-grid">
+                <input type="text" class="edu-school" placeholder="School / University">
+                <input type="text" class="edu-location" placeholder="Location">
+                <input type="text" class="edu-date" placeholder="Graduation Date">
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-publication-item">
+        <div class="card item-card">
+            <div class="card-header">
+                <input type="text" class="pub-title" placeholder="Paper/Publication Title" required>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="icon-btn move-up-btn" title="Move Up"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="icon-btn move-down-btn" title="Move Down"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="icon-btn delete-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="form-grid">
+                <input type="text" class="pub-authors" placeholder="Authors (e.g. Smith J., Doe J.)" style="grid-column: span 2;">
+                <input type="text" class="pub-journal" placeholder="Journal/Publisher">
+                <input type="text" class="pub-date" placeholder="Year/Date">
+                <input type="text" class="pub-link" placeholder="Link/DOI (Optional)" style="grid-column: span 2;">
+            </div>
+        </div>
+    </template>
+
+    <!-- PDF.js for reading PDF files locally -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

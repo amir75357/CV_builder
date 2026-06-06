@@ -24,12 +24,26 @@
                 <button class="nav-btn" data-target="section-education"><i class="fa-solid fa-graduation-cap"></i> Education</button>
                 <button class="nav-btn" data-target="section-skills"><i class="fa-solid fa-star"></i> Skills</button>
                 <button class="nav-btn" data-target="section-publications"><i class="fa-solid fa-book"></i> Publications</button>
-                <button class="nav-btn" data-target="section-job-desc" style="margin-top: 1rem; color: #4F46E5;"><i class="fa-solid fa-paste"></i> Job Description</button>
+                <button class="nav-btn" data-target="section-design" style="margin-top: 1rem; color: #10B981;"><i class="fa-solid fa-palette"></i> Design &amp; Preview</button>
+                <button class="nav-btn" data-target="section-job-desc" style="color: #4F46E5;"><i class="fa-solid fa-paste"></i> Job Description</button>
                 <button class="nav-btn" data-target="section-cover-letter" style="color: #4F46E5;"><i class="fa-solid fa-envelope"></i> Cover Letter</button>
                 <button class="nav-btn" data-target="section-translate" style="color: #4F46E5;"><i class="fa-solid fa-language"></i> AI Translate</button>
-                <button class="nav-btn" data-target="section-data"><i class="fa-solid fa-database"></i> Save & Load</button>
+                <button class="nav-btn" data-target="section-data"><i class="fa-solid fa-database"></i> Save &amp; Load</button>
                 <button class="nav-btn" data-target="section-settings"><i class="fa-solid fa-gear"></i> Settings</button>
             </nav>
+
+            <!-- Salary Estimator Sidebar Widget -->
+            <div class="sidebar-widget salary-widget" id="sidebar-salary-widget">
+                <div class="widget-header">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    <span id="salary-widget-title">Salary Indication</span>
+                </div>
+                <div class="widget-body" id="sidebar-salary-body">
+                    <span class="placeholder">No job desc estimated yet.</span>
+                </div>
+                <a id="salary-widget-link" class="widget-footer-link" style="display: none;">View Details &amp; Tips</a>
+            </div>
+
             <div class="sidebar-footer">
                 <button id="export-pdf-btn" class="primary-btn"><i class="fa-solid fa-download"></i> Export PDF</button>
             </div>
@@ -127,15 +141,160 @@
                 </div>
             </section>
 
+            <!-- Design & Preview -->
+            <section id="section-design" class="editor-section" style="max-width: 100%;">
+                <div class="design-container">
+                    <!-- Left Column: Design Controls -->
+                    <div class="design-controls-card">
+                        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);"><i class="fa-solid fa-sliders"></i> Layout Settings</h4>
+                        
+                        <!-- Font Family -->
+                        <div class="form-group">
+                            <label>Font Family</label>
+                            <select id="design-font" class="form-control" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                                <option value="Inter">Inter (Default Sans-serif)</option>
+                                <option value="Assistant">Assistant (Hebrew Sans-serif)</option>
+                                <option value="Heebo">Heebo (Modern Hebrew Sans-serif)</option>
+                                <option value="Rubik">Rubik (Rounded Sans-serif)</option>
+                                <option value="Alef">Alef (Hebrew Sans-serif)</option>
+                                <option value="Frank Ruhl Libre">Frank Ruhl Libre (Hebrew Serif)</option>
+                            </select>
+                        </div>
+
+                        <!-- Page Fit Mode -->
+                        <div class="form-group">
+                            <label>Page Fit Mode</label>
+                            <select id="design-fit" class="form-control" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                                <option value="auto">Auto (Manual spacing)</option>
+                                <option value="1">Force to 1 Page</option>
+                                <option value="2">Force to 2 Pages</option>
+                            </select>
+                        </div>
+
+                        <!-- Info Banner when Auto Fit is active -->
+                        <div id="design-autofit-banner" class="auto-fit-banner hidden" style="margin-bottom: 1rem;">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <div>
+                                <strong>Auto-Fit Active:</strong> Typography &amp; spacing are adjusted automatically to fit your page target.
+                            </div>
+                        </div>
+
+                        <!-- Warning Banner for very small styles -->
+                        <div id="design-warning-banner" class="auto-fit-banner hidden" style="background: #FFFBEB; border: 1px solid #FDE68A; color: #B45309; margin-bottom: 1rem;">
+                            <!-- Dynamic warning content -->
+                        </div>
+
+                        <!-- Font Size -->
+                        <div class="form-group">
+                            <div class="control-row">
+                                <label style="margin: 0;">Base Font Size <span style="font-weight: normal; opacity: 0.75; font-size: 0.8em; margin-left: 0.25rem;">(Rec. Min: 8.5pt)</span></label>
+                                <span id="val-font-size" class="slider-val">10pt</span>
+                            </div>
+                            <input type="range" id="design-font-size" min="2" max="14" step="0.2" value="10">
+                        </div>
+
+                        <!-- Line Height -->
+                        <div class="form-group">
+                            <div class="control-row">
+                                <label style="margin: 0;">Line Height <span style="font-weight: normal; opacity: 0.75; font-size: 0.8em; margin-left: 0.25rem;">(Rec. Min: 1.2)</span></label>
+                                <span id="val-line-height" class="slider-val">1.4</span>
+                            </div>
+                            <input type="range" id="design-line-height" min="1.1" max="1.8" step="0.05" value="1.4">
+                        </div>
+
+                        <!-- Section Spacing -->
+                        <div class="form-group">
+                            <div class="control-row">
+                                <label style="margin: 0;">Section Spacing <span style="font-weight: normal; opacity: 0.75; font-size: 0.8em; margin-left: 0.25rem;">(Rec. Min: 0.8em)</span></label>
+                                <span id="val-section-spacing" class="slider-val">2.0em</span>
+                            </div>
+                            <input type="range" id="design-section-spacing" min="0.5" max="3" step="0.1" value="2">
+                        </div>
+
+                        <!-- Item Spacing -->
+                        <div class="form-group">
+                            <div class="control-row">
+                                <label style="margin: 0;">Item Spacing <span style="font-weight: normal; opacity: 0.75; font-size: 0.8em; margin-left: 0.25rem;">(Rec. Min: 0.6em)</span></label>
+                                <span id="val-item-spacing" class="slider-val">1.2em</span>
+                            </div>
+                            <input type="range" id="design-item-spacing" min="0.2" max="2" step="0.1" value="1.2">
+                        </div>
+
+                        <!-- Side Margins -->
+                        <div class="form-group">
+                            <div class="control-row">
+                                <label style="margin: 0;">Page Margins (Padding) <span style="font-weight: normal; opacity: 0.75; font-size: 0.8em; margin-left: 0.25rem;">(Rec. Min: 1.8em)</span></label>
+                                <span id="val-page-margins" class="slider-val">3.0em</span>
+                            </div>
+                            <input type="range" id="design-page-margins" min="1" max="4" step="0.1" value="3">
+                        </div>
+
+                        <!-- Theme Color -->
+                        <div class="form-group">
+                            <label>Header Theme Color</label>
+                            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                <input type="color" id="design-color" value="#E6E6E6" style="width: 40px; height: 35px; padding: 0; cursor: pointer; border: 1px solid var(--border); border-radius: 4px;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">Pick header color</span>
+                            </div>
+                        </div>
+
+                        <!-- Page Size -->
+                        <div class="form-group">
+                            <label>Page Size</label>
+                            <select id="design-page-size" class="form-control auto-fit-disabled" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                                <option value="letter">Letter (US Standard)</option>
+                                <option value="a4">A4 (International)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Live Preview Area -->
+                    <div class="design-preview-panel">
+                        <div class="preview-toolbar">
+                            <span class="preview-zoom-info"><i class="fa-solid fa-magnifying-glass"></i> Zoom Auto-fit to Window</span>
+                            <button id="design-export-pdf-btn" class="primary-btn" style="width: auto; padding: 0.4rem 1rem; font-size: 0.85rem;"><i class="fa-solid fa-download"></i> Export PDF</button>
+                        </div>
+                        <div class="design-preview-scroll-wrapper">
+                            <div id="design-preview-scale-wrapper" style="position: relative;">
+                                <iframe id="design-preview-iframe" class="paper-preview-iframe" style="position: absolute; top: 0; left: 0; margin: 0;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Job Description (shared) -->
             <section id="section-job-desc" class="editor-section">
                 <h3>Job Description</h3>
-                <p class="section-desc">Paste the target job description here. It will be used by AI Tailoring and Cover Letter generation.</p>
+                <p class="section-desc">Paste the target job description here. It will be used by AI Tailoring, Cover Letter generation, and Salary Estimation.</p>
                 <div class="form-group">
                     <label>Job Description</label>
                     <textarea id="ai-job-description" rows="10" placeholder="Paste the full job description here..."></textarea>
                 </div>
                 <p class="help-text" style="margin-top: 0.5rem;"><i class="fa-solid fa-circle-info"></i> This is auto-saved. You can navigate to AI Tailoring or Cover Letter tabs to use it.</p>
+
+                <div class="card mt-4" style="border-left: 4px solid var(--primary); background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);">
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #312E81; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-bolt" style="color: var(--primary);"></i> One-Click AI Optimizer (התאמה מלאה בקליק אחד)
+                    </h4>
+                    <p class="help-text" style="color: #4338CA; margin-bottom: 1rem; font-size: 0.85rem; line-height: 1.5;">
+                        בלי לעבור סעיף-סעיף: כפתור זה יכין עבורך המלצות התאמה אישיות לכל חלקי קורות החיים (תקציר, כישורים, וניסיון תעסוקתי), ויבנה אוטומטית מכתב פנייה (Cover Letter) והערכת שכר מומלצת.
+                        <br>
+                        <span style="opacity: 0.8; font-size: 0.85rem;">(This will generate AI tailoring suggestions for all CV sections, estimate salary, and write a cover letter in one click.)</span>
+                    </p>
+                    <button id="auto-tailor-all-btn" class="primary-btn" style="width: auto; background: var(--primary);"><i class="fa-solid fa-wand-magic-sparkles"></i> Run Full AI Optimization</button>
+                </div>
+
+                <div class="card mt-4" style="border-left: 4px solid #10B981;">
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-hand-holding-dollar" style="color: #10B981;"></i> AI Salary Estimator
+                    </h4>
+                    <p class="help-text" style="margin-bottom: 1rem;">Analyze the job description above to estimate a reasonable salary range and receive negotiation tips based on required skills.</p>
+                    <button id="estimate-salary-btn" class="secondary-btn" style="width: auto; background: #E6F4EA; border-color: #A3E635; color: #137333;"><i class="fa-solid fa-calculator"></i> Estimate Salary Range</button>
+                    <div id="salary-estimate-output" class="hidden mt-3" style="padding: 1.25rem; background: #F4FBF7; border: 1px solid #C2ECD5; border-radius: 8px; color: #1F2937; font-size: 0.95rem; line-height: 1.6;">
+                        <!-- AI Output will go here -->
+                    </div>
+                </div>
             </section>
 
             <!-- AI Tailoring removed - now inline -->
@@ -305,6 +464,63 @@
             </div>
         </div>
     </template>
+
+    <!-- Global AI Processing Overlay -->
+    <div id="ai-progress-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <i class="fa-solid fa-wand-magic-sparkles fa-spin-pulse" style="color: var(--primary); font-size: 1.5rem;"></i>
+                <h3 id="modal-title" style="margin: 0; font-size: 1.25rem;">Running AI CV Optimization...</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modal-desc" class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem;">אנחנו מנתחים את תיאור המשרה ומייצרים המלצות מותאמות לקורות החיים שלך. אנא המתן.</p>
+                <div class="progress-steps-list">
+                    <div class="progress-step" id="step-init">
+                        <i class="fa-solid fa-circle-notch fa-spin step-icon"></i>
+                        <span class="step-label">Preparing job description...</span>
+                    </div>
+                    <div class="progress-step" id="step-summary">
+                        <i class="fa-regular fa-circle step-icon"></i>
+                        <span class="step-label">Tailoring summary suggestion...</span>
+                    </div>
+                    <div class="progress-step" id="step-skills">
+                        <i class="fa-regular fa-circle step-icon"></i>
+                        <span class="step-label">Tailoring skills suggestion...</span>
+                    </div>
+                    <div class="progress-step" id="step-experience">
+                        <i class="fa-regular fa-circle step-icon"></i>
+                        <span class="step-label">Tailoring work experience suggestions...</span>
+                    </div>
+                    <div class="progress-step" id="step-salary">
+                        <i class="fa-regular fa-circle step-icon"></i>
+                        <span class="step-label">Estimating market salary range...</span>
+                    </div>
+                    <div class="progress-step" id="step-coverletter">
+                        <i class="fa-regular fa-circle step-icon"></i>
+                        <span class="step-label">Generating tailored cover letter...</span>
+                    </div>
+                </div>
+                
+                <!-- Beautiful Cooldown Progress Bar Container -->
+                <div id="api-cooldown-container" class="hidden" style="margin-top: 1.5rem; padding: 1rem; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: #B45309; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        <i class="fa-solid fa-hourglass-half fa-spin" style="animation-duration: 3s;"></i>
+                        <span id="api-cooldown-title">עומס זמני, ממתינים לניסיון חוזר...</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #FEF3C7; border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem;">
+                        <div id="api-cooldown-bar" style="width: 100%; height: 100%; background: #F59E0B; transition: width 0.1s linear;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #B45309;">
+                        <span id="api-cooldown-text">מנסים שוב בעוד 60 שניות...</span>
+                        <span id="api-cooldown-attempt">ניסיון 1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <button id="close-progress-modal-btn" class="primary-btn" style="width: auto; padding: 0.5rem 1.5rem; display: none;">Done</button>
+            </div>
+        </div>
+    </div>
 
     <!-- PDF.js for reading PDF files locally -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
